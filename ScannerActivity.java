@@ -1,5 +1,7 @@
 package com.murtic.adis.techyz;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,10 +18,6 @@ import android.widget.Button;
 
 import com.google.zxing.Result;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -114,6 +112,28 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
                 mScannerView.startCamera();
             }
         });
+
+
+        buildAlert.setNeutralButton("Kopiraj", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                // Gets a handle to the clipboard service.
+                ClipboardManager clipboard = (ClipboardManager)
+                        getSystemService(Context.CLIPBOARD_SERVICE);
+
+                // Creates a new text clip to put on the clipboard
+                ClipData clip = ClipData.newPlainText("scanned_text",rawResult.getText());
+
+                // Set the clipboard's primary clip.
+                clipboard.setPrimaryClip(clip);
+
+                dialogInterface.cancel();
+                mScannerView.startCamera();
+
+            }
+        });
+
 
         buildAlert.setPositiveButton("Posjeti URL", new DialogInterface.OnClickListener() {
             @Override
